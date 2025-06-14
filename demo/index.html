@@ -880,7 +880,8 @@
 <script src="../dist/jquery-affix.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('h1,h2').affix({breakpoint: 'lg'});
+        $('h1').affix({breakpoint: 'lg', stackingOnTop: false});
+        $('h2').affix({breakpoint: 'lg', stackingOnTop: false});
     })
 </script>
 </body>

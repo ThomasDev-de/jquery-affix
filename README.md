@@ -1,6 +1,7 @@
 # jQuery Affix Plugin
 
-The **jQuery Affix Plugin** allows you to create sticky elements on your webpage with configurable offsets and optional breakpoints. It is lightweight, easy to use, and supports multiple affix elements.
+The **jQuery Affix Plugin** allows you to create sticky elements on your webpage with configurable offsets and optional
+breakpoints. It is lightweight, easy to use, and supports multiple affix elements.
 
 ---
 
@@ -32,11 +33,13 @@ The **jQuery Affix Plugin** allows you to create sticky elements on your webpage
 
 ## Usage
 
-To use the affix plugin, simply call the `.affix()` method on the desired element. You can pass optional configurations (as described below).
+To use the affix plugin, simply call the `.affix()` method on the desired element. You can pass optional
+configurations (as described below).
 
 ### Basic Example
 
 ```html
+
 <div id="my-sticky-element">
     I am a sticky element!
 </div>
@@ -56,17 +59,18 @@ In this example, the `#my-sticky-element` will stick to the top of its container
 
 The plugin provides the following configuration options:
 
-| Option       | Type                      | Default | Description                                                                 |
-|--------------|---------------------------|---------|-----------------------------------------------------------------------------|
-| `offsetTop`  | `number` (pixels)         | `0`     | Additional spacing to apply at the top before the sticky styling takes effect. |
-| `breakpoint` | `number` or `string`      | `null`  | Minimum screen width (in pixels or predefined breakpoint) to enable sticky.  |
+| Option          | Type                 | Default | Description                                                                    |
+|-----------------|----------------------|---------|--------------------------------------------------------------------------------|
+| `offsetTop`     | `number` (pixels)    | `0`     | Additional spacing to apply at the top before the sticky styling takes effect. |
+| `breakpoint`    | `number` or `string` | `null`  | Minimum screen width (in pixels or predefined breakpoint) to enable sticky.    |
+| `stackingOnTop` | `boolean`            | `false` | Forcing the element to fise top 0 position.                                    |
 
 ### Predefined Breakpoints:
 
 You can use the following values for the `breakpoint` option:
 
 | Breakpoint Name | Screen Width (px) |
-|------------------|-------------------|
+|-----------------|-------------------|
 | `sm`            | 576               |
 | `md`            | 768               |
 | `lg`            | 992               |
@@ -78,6 +82,7 @@ You can use the following values for the `breakpoint` option:
 ### Example with Options
 
 ```html
+
 <div id="custom-sticky-element">
     I will stick with custom settings!
 </div>
@@ -98,9 +103,11 @@ You can use the following values for the `breakpoint` option:
 
 ### Multiple Sticky Elements
 
-The plugin automatically handles multiple sticky elements and ensures that each subsequent element takes into account the height of the previous ones. Here's an example:
+The plugin automatically handles multiple sticky elements and ensures that each subsequent element takes into account
+the height of the previous ones. Here's an example:
 
 ```html
+
 <div class="affix-item">Element 1</div>
 <div class="affix-item">Element 2</div>
 
@@ -118,6 +125,7 @@ The plugin automatically handles multiple sticky elements and ensures that each 
 You can pass numerical values as breakpoints instead of predefined strings:
 
 ```html
+
 <div id="dynamic-breakpoint">
     I stick on screens >= 1000px wide.
 </div>
@@ -152,9 +160,11 @@ Here is a brief overview of the plugin's internal behavior:
 
 ## Browser Support
 
-This plugin relies on the browser's support for the CSS `position: sticky` property. Ensure your users have a modern browser for full functionality.
+This plugin relies on the browser's support for the CSS `position: sticky` property. Ensure your users have a modern
+browser for full functionality.
 
 Tested on:
+
 - Google Chrome (latest versions)
 - Mozilla Firefox (latest versions)
 - Microsoft Edge
@@ -164,10 +174,12 @@ Tested on:
 ## Troubleshooting
 
 - **Sticky not working on older browsers**:
-  Ensure the browser supports the CSS `position: sticky` property. Check [Can I Use](https://caniuse.com/?search=sticky) for browser compatibility.
+  Ensure the browser supports the CSS `position: sticky` property. Check [Can I Use](https://caniuse.com/?search=sticky)
+  for browser compatibility.
 
 - **Element not sticking at the correct position**:
-  Double-check the `offsetTop` setting and ensure no `margin` or `transform` styles are interfering with the sticky behavior.
+  Double-check the `offsetTop` setting and ensure no `margin` or `transform` styles are interfering with the sticky
+  behavior.
 
 ---
 
