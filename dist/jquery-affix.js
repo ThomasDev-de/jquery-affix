@@ -1,55 +1,62 @@
 (function ($) {
     $.affix = {
         defaults: {
-            offsetTop: 0,      // Standardwert für zusätzlichen Offset
-            breakpoint: null   // Standardmäßig kein Breakpoint
+            offsetTop: 0,      // Default value for additional offset
+            breakpoint: null   // Default: no breakpoint
         }
     };
 
-    // Erstelle eine Instanz des ResizeObserver (einmalig)
+    // Create a single instance of ResizeObserver
     let resizeObserver = null;
 
+    // Main affix plugin function
     $.fn.affix = function (options) {
+        // If there are multiple elements, initialize each one individually
         if ($(this).length > 1) {
             return $(this).each(function (i, e) {
                 return $(e).affix(options);
             });
         }
 
+        // Select the current element
         const $element = $(this);
 
+        // Prevent multiple initializations for the same element
         if (!$element.data('affixInitialized')) {
             let settings;
 
+            // Merge user-provided options with default settings
             if (!options) {
                 settings = $.affix.defaults;
             } else {
                 settings = $.extend(true, {}, $.affix.defaults, options || {});
             }
 
+            // Store the settings in the element's data
             $element.data('settings', settings);
             $element.attr('data-affix', 'false');
 
-
-            // Registriere den ResizeObserver, falls noch nicht vorhanden
+            // Initialize ResizeObserver, if not already set
             if (!resizeObserver) {
                 resizeObserver = new ResizeObserver(() => setOffsetTop());
                 resizeObserver.observe(document.documentElement);
 
-                // Prüfung: Ist das Element sticky oder nicht?
+                // Update offsets and sticky states on scroll
                 $(window).on('scroll', function () {
                     setOffsetTop();
                 });
-
             }
-            // Bei Neuinitialisierung setze offsetTop aller affixe neu
+
+            // Initialize offsets on new initialization
             setOffsetTop();
 
+            // Mark the element as initialized
             $element.data('affixInitialized', true);
         }
 
-        // Hilfsfunktion: Überprüfung, ob der aktuelle Breakpoint erreicht ist
+        // Helper function: Check if a breakpoint is active
         function isBreakpointActive(bp) {
+            // Predefined breakpoints
             const breakpoints = {
                 sm: 576,
                 md: 768,
@@ -58,83 +65,96 @@
                 xxl: 1400
             };
 
-            // Breite des Viewports abrufen
+            // Get the current viewport width
             const currentWidth = window.innerWidth;
 
-            // Wenn der Breakpoint gültig ist und der Viewport die entsprechende Breite erreicht, aktivieren
+            // If `bp` is a number, compare directly
+            if (typeof bp === 'number' || !isNaN(bp)) {
+                return currentWidth >= bp;
+            }
+
+            // If `bp` is a string like 'sm', 'md', etc., get the corresponding value
             return breakpoints[bp] ? currentWidth >= breakpoints[bp] : true;
         }
 
+        // Helper function: Reset the element's sticky state
         function setUnSticky($el) {
             $el
                 .css({
-                    position: '', // Kein Sticky anwenden
+                    position: '', // Reset position
                     top: '',
                     zIndex: ''
                 })
-                .attr('data-affix', 'false');
+                .attr('data-affix', 'false'); // Mark as not sticky
         }
 
+        // Function to calculate and set offsetTop for affix elements
         function setOffsetTop() {
+            // Select all elements marked with `data-affix`
             const $affixElements = $('[data-affix]');
 
-            // Initialisiere jedes Affix-Element
+            // Process each affix element
             $affixElements.each(function (index, el) {
                 const $currentElement = $(el);
 
+                // Get the settings for the current element
                 const currentElementSettings = $currentElement.data('settings');
 
-                // Breakpoint-Logik: Nur fortfahren, wenn der Breakpoint aktiv ist
+                // Handle breakpoints: Skip if the breakpoint is not active
                 if (
                     currentElementSettings.breakpoint &&
                     !isBreakpointActive(currentElementSettings.breakpoint)
                 ) {
                     setUnSticky($currentElement);
-                    return; // Aktuelles Element überspringen
+                    return; // Skip this element
                 }
 
                 let topOffset = 0;
 
-                // Gehe durch alle vorherigen Affix-Elemente und summiere deren Höhe
+                // Calculate the combined height of previous affix elements
                 for (let i = 0; i < index; i++) {
                     const previousElement = $($affixElements[i]);
-                    topOffset += previousElement.outerHeight(); // Höhe des vorherigen Elements
+                    topOffset += previousElement.outerHeight(); // Add the height of the previous element
                 }
 
-                // Addiere den optionalen offsetTop-Wert
+                // Add the optional `offsetTop` value from the element's settings
                 topOffset += currentElementSettings.offsetTop;
 
+                // Store the calculated offset in the element's data
                 $currentElement.data('offsetTop', topOffset);
-                // Setze das aktuelle Element auf die berechnete Top-Position
+
+                // Apply computed sticky positioning to the element
                 $currentElement.css({
                     position: 'sticky',
                     top: `${topOffset}px`,
-                    zIndex: 1000 - index // Um Überdeckungsprobleme zu vermeiden
+                    zIndex: 1000 - index // Decrease z-index to avoid overlap
                 });
-                if( isElementSticky( $currentElement ) ) {
+
+                // Check if the element is sticky and update `data-affix` accordingly
+                if (isElementSticky($currentElement)) {
                     $currentElement.attr('data-affix', 'true');
                 } else {
                     $currentElement.attr('data-affix', 'false');
-
                 }
             });
         }
 
+        // Helper function: Check if an element is in sticky state
         function isElementSticky($element) {
-            // Die aktuelle Offset-Position des Elements relativ zum Dokument
+            // Get the offset position of the element relative to the document
             const elementOffset = $element.offset().top;
 
-            // Die aktuelle Scroll-Position des Fensters
+            // Get the current scroll position of the window
             const scrollTop = $(window).scrollTop();
 
-            // Die Sticky-Position des Elements
+            // Get the element's sticky start position
             const stickyStart = $element.data('offsetTop') || parseInt($element.css('top')) || 0;
 
-            // Prüfen, ob die Scroll-Position das Sticky-Verhalten aktiviert
+            // Return whether the element should currently be sticky
             return scrollTop >= parseInt(elementOffset - stickyStart);
         }
 
-
+        // Return the jQuery object for chaining
         return this;
     };
 })(jQuery);
