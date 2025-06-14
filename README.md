@@ -63,7 +63,6 @@ The plugin provides the following configuration options:
 |-----------------|----------------------|---------|--------------------------------------------------------------------------------|
 | `offsetTop`     | `number` (pixels)    | `0`     | Additional spacing to apply at the top before the sticky styling takes effect. |
 | `breakpoint`    | `number` or `string` | `null`  | Minimum screen width (in pixels or predefined breakpoint) to enable sticky.    |
-| `stackingOnTop` | `boolean`            | `false` | Forcing the element to fise top 0 position.                                    |
 
 ### Predefined Breakpoints:
 
