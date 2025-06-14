@@ -1,0 +1,15 @@
+{
+  "name": "webcito/jquery-affix",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "thomas",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "components/jquery": "^3"
+  }
+}
