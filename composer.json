@@ -1,6 +1,6 @@
 {
   "name": "webcito/jquery-affix",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight jQuery plugin that provides a flexible sticky behavior with configurable options and breakpoints.",
   "type": "library",
   "keywords": ["jquery", "plugin", "affix", "sticky", "scroll", "responsive"],
