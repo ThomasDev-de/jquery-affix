@@ -47,6 +47,9 @@
             $element.data('settings', settings);
             $element.addClass('affix');
 
+            // Save original styles
+            saveOriginalStyles($element);
+
             // Initialize ResizeObserver, if not already set
             if (!resizeObserver) {
                 resizeObserver = new ResizeObserver(() => setOffsetTop());
@@ -67,7 +70,6 @@
 
         // Helper function: Check if a breakpoint is active
         function isBreakpointActive(bp) {
-            // Predefined breakpoints
             const breakpoints = {
                 sm: 576,
                 md: 768,
@@ -76,69 +78,63 @@
                 xxl: 1400
             };
 
-            // Get the current viewport width
             const currentWidth = window.innerWidth;
 
-            // If `bp` is a number, compare directly
             if (typeof bp === 'number' || !isNaN(bp)) {
                 return currentWidth >= bp;
             }
 
-            // If `bp` is a string like 'sm', 'md', etc., get the corresponding value
             return breakpoints[bp] ? currentWidth >= breakpoints[bp] : true;
+        }
+
+        // Helper function: Save original styles before modification
+        function saveOriginalStyles($el) {
+            const originalStyles = {
+                position: $el.css('position'),
+                top: $el.css('top'),
+                zIndex: $el.css('zIndex')
+            };
+            $el.data('originalStyles', originalStyles);
         }
 
         // Helper function: Reset the element's sticky state
         function setUnSticky($el) {
+            const originalValues = $el.data('originalStyles') || {};
             $el
-                .css({
-                    position: '', // Reset position
-                    top: '',
-                    zIndex: ''
-                })
-                .removeClass('affixed') // Mark as not sticky
+                .css(originalValues)
+                .removeClass('affixed');
         }
 
         // Function to calculate and set offsetTop for affix elements
         function setOffsetTop() {
-            // Wähle alle Elemente mit `data-affix` aus
             const $affixElements = $('.affix');
 
-            // Verarbeite jedes Affix-Element
             $affixElements.each(function (index, el) {
                 const $currentElement = $(el);
 
-                // Einstellungen für das aktuelle Element abrufen
                 const currentElementSettings = $currentElement.data('settings');
 
-                // Fallbehandlung: Überspringen, falls der Breakpoint nicht aktiv ist
                 if (
                     currentElementSettings.breakpoint &&
                     !isBreakpointActive(currentElementSettings.breakpoint)
                 ) {
                     setUnSticky($currentElement);
-                    return; // Überspringe dieses Element
+                    return;
                 }
 
-                let topOffset =0;
+                let topOffset = 0;
 
-
-                // Ermittlung der Positionen des aktuellen Elements (X-Achse)
                 const currentLeft = $currentElement.offset().left;
                 const currentRight = currentLeft + $currentElement.outerWidth();
 
-                // Berechnung: Kollisionen mit vorherigen Elementen prüfen (nur X-Achse)
                 for (let i = 0; i < index; i++) {
                     const $previousElement = $($affixElements[i]);
 
-                    // Hole die Grenzen des vorherigen Elements (X-Achse)
                     const previousLeft = $previousElement.offset().left;
                     const previousRight = previousLeft + $previousElement.outerWidth();
 
-                    // Prüfe, ob sich die Bereiche auf der X-Achse überschneiden
                     const isOverlappingX = currentRight > previousLeft && currentLeft < previousRight;
 
-                    // Falls X-Kollision: Addiere die Höhe des vorherigen Elements zur `topOffset`
                     if (isOverlappingX) {
                         topOffset =
                             Math.max(topOffset, $previousElement.data('offsetTop') + $previousElement.outerHeight());
@@ -146,17 +142,14 @@
                 }
 
                 topOffset += currentElementSettings.offsetTop || 0;
-                // Speichere den berechneten Offset im Element
                 $currentElement.data('offsetTop', topOffset);
 
-                // Wende die berechnete Sticky-Position auf das aktuelle Element an
                 $currentElement.css({
                     position: 'sticky',
                     top: `${topOffset}px`,
-                    zIndex: 1000 - index // Reduziere den Z-Index für die Stapelreihenfolge
+                    zIndex: 1000 - index
                 });
 
-                // Überprüfen, ob das Element sticky ist, und `data-affix` entsprechend setzen
                 if (isElementSticky($currentElement)) {
                     $currentElement.addClass('affixed');
                 } else {
@@ -167,20 +160,13 @@
 
         // Helper function: Check if an element is in sticky state
         function isElementSticky($element) {
-            // Get the offset position of the element relative to the document
             const elementOffset = $element.offset().top;
-
-            // Get the current scroll position of the window
             const scrollTop = $(window).scrollTop();
-
-            // Get the element's sticky start position
             const stickyStart = $element.data('offsetTop') || parseInt($element.css('top')) || 0;
 
-            // Return whether the element should currently be sticky
             return scrollTop >= parseInt(elementOffset - stickyStart);
         }
 
-        // Return the jQuery object for chaining
         return this;
     };
 })(jQuery);
