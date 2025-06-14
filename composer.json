@@ -1,14 +1,24 @@
 {
   "name": "webcito/jquery-affix",
-  "description": "description",
+  "version": "1.0.0",
+  "description": "A lightweight jQuery plugin that provides a flexible sticky behavior with configurable options and breakpoints.",
+  "type": "library",
+  "keywords": ["jquery", "plugin", "affix", "sticky", "scroll", "responsive"],
+  "homepage": "https://github.com/ThomasDev-de/jquery-affix",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
-      "name": "thomas",
-      "email": "email@example.com"
+      "name": "Thomas",
+      "email": "t.kirsch@webcito.de",
+      "role": "Developer",
+      "homepage": "https://webcito.de"
     }
   ],
+  "support": {
+    "issues": "https://github.com/ThomasDev-de/jquery-affix/issues",
+    "source": "https://github.com/ThomasDev-de/jquery-affix"
+  },
   "require": {
     "components/jquery": "^3"
   }
