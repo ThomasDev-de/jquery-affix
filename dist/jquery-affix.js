@@ -66,6 +66,7 @@
 
             // Mark the element as initialized
             $element.data('affixInitialized', true);
+            $element.trigger('init');
         }
 
         // Helper function: Check if a breakpoint is active
@@ -103,6 +104,7 @@
             $el
                 .css(originalValues)
                 .removeClass('affixed');
+            $el.trigger('unaffixed');
         }
 
         // Function to calculate and set offsetTop for affix elements
@@ -151,9 +153,15 @@
                 });
 
                 if (isElementSticky($currentElement)) {
-                    $currentElement.addClass('affixed');
+                    if (!$currentElement.hasClass('affixed')) {
+                        $currentElement.trigger('affixed');
+                        $currentElement.addClass('affixed');
+                    }
                 } else {
-                    $currentElement.removeClass('affixed');
+                    if ($currentElement.hasClass('affixed')) {
+                        $currentElement.trigger('unaffixed');
+                        $currentElement.removeClass('affixed');
+                    }
                 }
             });
         }

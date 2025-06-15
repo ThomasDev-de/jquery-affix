@@ -19,22 +19,22 @@ breakpoints. It is lightweight, easy to use, and supports multiple affix element
 
 1. Include jQuery in your project (if not already included):
 
-   ```html
-   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-   ```
+```html
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+```
 
 2. Add the `affix` plugin script to your project:
 
-   ```html
-   <script src="path/to/your/jquery.affix.js"></script>
-   ```
+```html
+<script src="dist/jquery-affix.min.js"></script>
+```
 
 ---
 
 ## Usage
 
-To use the affix plugin, simply call the `.affix()` method on the desired element. You can pass optional
-configurations (as described below).
+To use the affix plugin, call the `.affix()` method on the desired element.
+You can pass optional configurations (as described below).
 
 ### Basic Example
 
@@ -75,8 +75,26 @@ You can use the following values for the `breakpoint` option:
 | `lg`            | 992               |
 | `xl`            | 1200              |
 | `xxl`           | 1400              |
+| `any number`    | 2000              |
 
 ---
+
+### Methods
+
+The Affix element fires three events:
+
+```javascript
+$(document)
+    .on('init', '#my-sticky-element', function (){
+        // I am now part of the Affix Plugin
+    })
+    .on('affixed', '#my-sticky-element', function (){
+        // I was pinned
+    })
+    .on('unaffixed', '#my-sticky-element', function (){
+        // I was unpinned
+    })
+```
 
 ### Example with Options
 
