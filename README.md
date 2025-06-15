@@ -79,7 +79,7 @@ You can use the following values for the `breakpoint` option:
 
 ---
 
-### Methods
+### Events
 
 The Affix element fires three events:
 
